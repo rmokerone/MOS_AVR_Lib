@@ -26,7 +26,10 @@ typedef struct
      */
     uint8 SPI_MODE_Select;
 
-    /*
+}SPI_InitTypeDef;
+
+typedef struct{
+     /*
      * 描述：
      *    选择SPI的片选引脚配置寄存器（仅主机模式）
      * 取值：
@@ -55,26 +58,26 @@ typedef struct
      *    不必须初始化，默认使用SS(PIN2)
      */
     uint8 SPI_CSN_PIN;
-}SPI_InitTypeDef;
+}SPI_CSN_TypeDef;
 
 //一帧完成后CSN的状态
 #define SPI_CSN_ASSERTED  (1)
 #define SPI_CSN_INACTIVE  (0)
 
 //SPI初始化函数
-uint8 MOS_SPI_Init (SPI_InitTypeDef);
+uint8 MOS_SPI_Init (SPI_InitTypeDef, SPI_CSN_TypeDef);
 //SPI反初始化函数
-uint8 MOS_SPI_Deinit (SPI_InitTypeDef);
+uint8 MOS_SPI_Deinit (SPI_InitTypeDef, SPI_CSN_TypeDef);
 //SPI使能串行传输结束中断
-uint8 MOS_SPI_EnableIrq (SPI_InitTypeDef);
+uint8 MOS_SPI_EnableIrq (SPI_CSN_TypeDef);
 //SPI禁止串行传输结束中断
-uint8 MOS_SPI_DisableIrq (SPI_InitTypeDef);
+uint8 MOS_SPI_DisableIrq (SPI_CSN_TypeDef);
 //SPI主机读写函数
-uint8 MOS_SPI_Master_WriteRead (SPI_InitTypeDef, uint8, uint8);
+uint8 MOS_SPI_Master_WriteRead (SPI_CSN_TypeDef, uint8, uint8);
 //SPI主机读函数
-uint8 MOS_SPI_Master_Read(SPI_InitTypeDef);
+uint8 MOS_SPI_Master_Read(SPI_CSN_TypeDef);
 //SPI主机写函数
-uint8 MOS_SPI_Master_Write (SPI_InitTypeDef, uint8);
+uint8 MOS_SPI_Master_Write (SPI_CSN_TypeDef, uint8);
 
 //定义默认端口
 #define CSN   PB2

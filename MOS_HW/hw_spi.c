@@ -15,21 +15,25 @@
  * 参数：
  *    spi_init_structure--SPI初始化结构体，
  *                          具体定义见SPI_InitTypeDef
+ *    spi_csn_structure --CSN端口初始话结构体
+ *                          具体定义见SPI_CSN_TypeDef
  *
  * 输出：
  *    0 -- 配置错误
  *    1 -- 配置成功
  */
-uint8 MOS_SPI_Init (SPI_InitTypeDef spi_init_structure)
+uint8 MOS_SPI_Init (SPI_InitTypeDef spi_init_structure, 
+                    SPI_CSN_TypeDef spi_csn_structure)
 {
     //SPI工作模式
     uint8 spi_mode = spi_init_structure.SPI_MODE_Select;
+
     //SPI片选引脚配置寄存器
-    uint8 spi_csn_port = spi_init_structure.SPI_CSN_PORT;
+    uint8 spi_csn_port = spi_csn_structure.SPI_CSN_PORT;
     //SPI片选引脚方向寄存器
-    uint8 spi_csn_ddr = spi_init_structure.SPI_CSN_DDR;
+    uint8 spi_csn_ddr = spi_csn_structure.SPI_CSN_DDR;
     //SPI片选端口
-    uint8 spi_csn_pin = spi_init_structure.SPI_CSN_PIN;
+    uint8 spi_csn_pin = spi_csn_structure.SPI_CSN_PIN;
 
     //初始化输出端口
     DDRB |= (1<<MOSI) | (1<< SCK) | (1<<CSN);
@@ -65,8 +69,8 @@ uint8 MOS_SPI_Init (SPI_InitTypeDef spi_init_structure)
  * AVR主机SPI向从机写入数据，并读取从机数据
  *
  * 参数：
- *    spi_init_structure -- SPI初始化结构体
- *                          具体定义见SPI_InitTypeDef
+ *    spi_csn_structure -- CSN端口初始化结构体
+ *                          具体定义见SPI_CSN_TypeDef
  *    data --要发送的数据
  *          单位为一个字节，8位
  *    csn_state -- 一帧数据传送完成后的CS的状态
@@ -75,11 +79,11 @@ uint8 MOS_SPI_Init (SPI_InitTypeDef spi_init_structure)
  *输出：
  *    读取从机8位的数据
  */
- uint8 MOS_SPI_Master_WriteRead (SPI_InitTypeDef spi_init_structure,
+ uint8 MOS_SPI_Master_WriteRead (SPI_CSN_TypeDef spi_csn_structure,
                                uint8 data, uint8 csn_state)
  {
-     uint8 spi_csn_port = spi_init_structure.SPI_CSN_PORT;
-     uint8 spi_csn_pin = spi_init_structure.SPI_CSN_PIN;
+     uint8 spi_csn_port = spi_csn_structure.SPI_CSN_PORT;
+     uint8 spi_csn_pin = spi_csn_structure.SPI_CSN_PIN;
     //将CSN置为低电平
      if ((spi_csn_port == NULL)||(spi_csn_port == NULL))
      {
@@ -115,15 +119,15 @@ uint8 MOS_SPI_Init (SPI_InitTypeDef spi_init_structure)
   * AVR主机SPI从从机中读取数据
   *
   * 参数：
- *    spi_init_structure -- SPI初始化结构体
- *                          具体定义见SPI_InitTypeDef
+ *    spi_csn_structure -- CSN初始化结构体
+ *                          具体定义见SPI_CSN_TypeDef
  *  输出：
  *   从从机中读取到的数据
  */
- uint8 MOS_SPI_Master_Read (SPI_InitTypeDef spi_init_structure)
+ uint8 MOS_SPI_Master_Read (SPI_CSN_TypeDef spi_csn_structure)
  {
      uint8 data;
-     data = MOS_SPI_Master_WriteRead(spi_init_structure,
+     data = MOS_SPI_Master_WriteRead(spi_csn_structure,
                                      0x00,
                                      SPI_CSN_INACTIVE);
      return data;
@@ -133,16 +137,18 @@ uint8 MOS_SPI_Init (SPI_InitTypeDef spi_init_structure)
   * AVR主机SPI向从机中写入数据
   *
   * 参数：
-  *    spi_init_structure -- SPI初始化结构体
-  *                          具体定义见SPI_InitTypeDef
+  *    spi_csn_structure -- CSN初始化结构体
+  *                          具体定义见SPI_CSN_TypeDef
+  *    data:要向从机发送的数据
+  *         单位为一个字节，8bits
   *
   * 输出：
   *     1 -- 成功
   */
-  uint8 MOS_SPI_Master_Write (SPI_InitTypeDef spi_init_structure
+  uint8 MOS_SPI_Master_Write (SPI_CSN_TypeDef spi_csn_structure
                             ,uint8 data)
   {
-      MOS_SPI_Master_WriteRead(spi_init_structure,
+      MOS_SPI_Master_WriteRead(spi_csn_structure,
                               data,
                               SPI_CSN_INACTIVE);
       return 1;
