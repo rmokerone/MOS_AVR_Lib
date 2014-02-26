@@ -54,7 +54,7 @@ uint8 MOS_SPI_Init (SPI_InitTypeDef spi_init_structure,
         //CSN置为高电平
         PORTB |= (1<<CSN);
         //如果片选不为SS，根据定义进行修改
-        if (~((spi_csn_ddr == NULL)||(spi_csn_pin == NULL)))
+        if (~((spi_csn_ddr == 0)||(spi_csn_pin == 0)))
         {
             spi_csn_ddr |= (1<<spi_csn_pin);
             //csn置高电平
@@ -85,7 +85,7 @@ uint8 MOS_SPI_Init (SPI_InitTypeDef spi_init_structure,
      uint8 spi_csn_port = spi_csn_structure.SPI_CSN_PORT;
      uint8 spi_csn_pin = spi_csn_structure.SPI_CSN_PIN;
     //将CSN置为低电平
-     if ((spi_csn_port == NULL)||(spi_csn_port == NULL))
+     if ((spi_csn_port == 0)||(spi_csn_port == 0))
      {
          PORTB &= ~(1<<CSN);
      }
@@ -102,7 +102,7 @@ uint8 MOS_SPI_Init (SPI_InitTypeDef spi_init_structure,
      }
      else 
      {
-        if ((spi_csn_port == NULL)||(spi_csn_port == NULL))
+        if ((spi_csn_port == 0)||(spi_csn_port == 0))
         {
             PORTB |= (1<<CSN);
         }

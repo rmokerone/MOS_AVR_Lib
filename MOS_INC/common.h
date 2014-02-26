@@ -10,8 +10,14 @@
 
 //包含标准头文件
 #include <avr/io.h>
+#include <stdio.h>
+#include <avr/interrupt.h>
 
-#define NULL 0
+//定义系统时钟
+#define CRYSTAL  (8000000)
+#define F_CPU CRYSTAL
+#include <util/delay.h>
+
 /*
  * 基本数据类型定义
  */
